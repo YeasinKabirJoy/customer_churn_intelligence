@@ -1,115 +1,128 @@
 # Telecom Customer Churn Intelligence
 
-A reproducible descriptive and diagnostic analytics project for understanding customer churn patterns in the IBM Telco Customer Churn sample.
+An end-to-end analytics portfolio project that turns the IBM Telco Customer Churn sample into governed SQL analysis, reproducible Python EDA, BI-ready semantic definitions, and an explicitly limited machine-learning risk-ranking demonstration.
+
+> **Headline:** 1,869 of 7,043 customers churned (26.537%). Churn is concentrated among early-tenure, month-to-month, fiber-optic, and electronic-check customers. These overlapping observational patterns identify investigation priorities—not causal drivers.
+
+![Executive dashboard preview](reports/powerbi/executive_overview_preview.png)
 
 ## Business objective
 
-Help a telecom retention or customer-success team understand where churn is concentrated, which observable customer and account characteristics are associated with churn, and which meaningful segments deserve investigation or a controlled retention experiment.
+Help a retention team understand where churn is concentrated, select evidence-based investigation priorities, and design a controlled retention experiment. The project separates verified descriptive KPIs from predictive holdout metrics and avoids presenting association as causation.
 
-This project does not claim that observed characteristics cause churn. Predictive modeling, production deployment, and automated retention actions are outside the core scope.
+## Verified results
 
-## Audience
+| KPI | Result |
+|---|---:|
+| Customers | 7,043 |
+| Churned customers | 1,869 |
+| Retained customers | 5,174 |
+| Churn rate | 26.537% |
+| Total monthly charges | $456,116.60 |
+| Average monthly charges | $64.76 |
+| Missing total charges | 11 |
 
-- Retention or customer-success manager
-- Commercial or marketing analyst
-- Analytics hiring manager reviewing the portfolio project
+Priority evidence:
 
-## Data contract (provisional until Phase 2 validation)
+- Month-to-month: 3,875 customers, 1,655 churned, 42.7% churn.
+- First 0–12 months: 2,186 customers, 1,037 churned, 47.4% churn.
+- Fiber optic: 3,096 customers, 1,297 churned, 41.9% churn.
+- Electronic check: 2,365 customers, 1,071 churned, 45.3% churn.
 
-- Expected grain: one row per customer
-- Candidate primary key: `customerID`
-- Outcome: `Churn`, indicating whether the customer left
-- Churn rate: distinct churned customers divided by distinct eligible customers in the current filter context
-- Source of truth: the actual supplied CSV, not an assumed schema
+These segments overlap and must not be added as independent opportunities. See the [executive brief](docs/executive_brief.md) for decisions, limitations, and the proposed experiment.
 
-These statements remain provisional until the Phase 2 audit proves the grain, key, categories, and missing-value behavior.
+## Predictive demonstration
 
-## Evidence rule
+![Predictive dashboard preview](reports/powerbi/predictive_demonstration_preview.png)
 
-No count, rate, ranking, segment finding, revenue amount, or business-impact claim is reported until it is calculated from the supplied data and independently reconciled. Dashboard examples use placeholders until validation is complete.
+Logistic regression is the primary proof-of-concept model, compared with a constrained decision tree. On a stratified 20% holdout containing 1,409 customers:
+
+| Metric | Logistic regression |
+|---|---:|
+| ROC-AUC | 0.839 |
+| Average precision | 0.630 |
+| Precision at 0.5 | 63.4% |
+| Recall at 0.5 | 54.3% |
+| Highest-risk 20% churners captured | 184 of 374 |
+| Recall at 20% capacity | 49.2% |
+| Lift at 20% capacity | 2.46× |
+
+This is same-population holdout performance from a static snapshot—not future-period validation or a deployment claim. See the [methodology](docs/ml_methodology.md) and [results report](docs/ml_results_report.md).
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[Raw CSV<br/>local and immutable] --> B[Python cleaning<br/>and validation]
+    B --> C[Analysis-ready<br/>customer table]
+    C --> D[SQLite views<br/>and KPI queries]
+    C --> E[Python EDA<br/>and reconciliation]
+    C --> F[Power BI and Tableau<br/>source contracts]
+    C --> G[ML training pipeline]
+    D --> H[Governed KPI exports]
+    E --> H
+    H --> F
+    G --> I[Holdout metrics<br/>risk deciles and fairness slices]
+    I --> J[Predictive demonstration]
+```
+
+## Quality controls
+
+- One row per unique customer and zero dropped source rows.
+- Eleven blank `TotalCharges` values retained as missing.
+- Frozen KPI dictionary shared across SQL, Python, Power BI, and Tableau.
+- 107 Python-to-SQL overall and segment comparisons passed.
+- Preprocessing fitted only inside ML training pipelines.
+- Identifiers and outcome-derived fields excluded from predictors.
+- Fixed random seed and reproducible stratified train/test split.
+- Automated tests cover data, SQL, EDA, BI assets, ML, and portfolio outputs.
+
+See [cross-tool reconciliation](docs/cross_tool_reconciliation.md) for exact status. Interactive `.pbix` and `.twbx` files remain local application-level gates because native desktop control was unavailable; previews are not mislabeled as interactive workbooks.
 
 ## Repository map
 
 ```text
-data/
-  raw/          Immutable local source files (not committed)
-  processed/    Generated analysis-ready outputs (not committed)
-notebooks/      Numbered, question-first exploration notebooks
-src/            Reusable Python cleaning and validation code
-sql/            SQLite schema, views, KPI queries, and checks
-reports/
-  powerbi/      Power BI report, screenshots, and exports
-  tableau/      Tableau workbook, screenshots, and exports
-docs/           Charter, dictionaries, logs, QA, and narrative
-tests/          Data assertions and reproducibility checks
+data/                  Local raw and generated data contracts
+docs/                  Dictionaries, QA, methodology, narrative, and runbooks
+reports/figures/       Verified EDA charts
+reports/ml/            Model artifacts, metrics, diagnostics, and exports
+reports/powerbi/       Theme, semantic definitions, DAX, specifications, previews
+reports/tableau/       Calculated fields, specifications, previews
+sql/                   SQLite schema, views, KPIs, segments, and checks
+src/                   Reproducible Python pipelines
+tests/                 Automated validation suite
 ```
 
-## Current phase
+## Reproduce locally
 
-Phase 7 lightweight ML complete - reproducible logistic-regression and shallow-tree pipelines, held-out evaluation, business-capacity metrics, risk deciles, fairness diagnostics, dashboard-ready predictions, and interview documentation are included. The ML layer is explicitly a proof of concept, not a production churn system.
-
-## Setup
-
-Create and activate a virtual environment, then install the project dependencies:
+Place the source file at the repository root as `Telco-Customer-Churn.csv`; it is intentionally excluded from Git. Then:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-```
-
-Validate the Phase 1 project foundation:
-
-```powershell
 python src/project_check.py
-```
-
-The check verifies required folders, the canonical raw file, its recorded hash, and local Python/SQLite availability. It does not calculate churn findings.
-
-Run the repeatable Phase 2 cleaning and validation pipeline:
-
-```powershell
 python src/data_pipeline.py
-python -m pytest
-```
-
-Build and validate the SQLite analytical layer:
-
-```powershell
 python src/sql_pipeline.py
-python -m pytest
-```
-
-Generate the Python EDA outputs and charts:
-
-```powershell
 python src/eda_pipeline.py
-python -m pytest
-```
-
-Generate the Tableau dashboard previews:
-
-```powershell
+python src/powerbi_preview.py
 python src/tableau_preview.py
-python -m pytest
-```
-
-Train and evaluate the Phase 7 proof-of-concept models:
-
-```powershell
 python src/ml_pipeline.py
-python -m pytest
+python src/ml_dashboard_preview.py
+python -m pytest -q
 ```
 
-## Planned workflow
+Detailed instructions are in the [reproducibility runbook](docs/reproducibility_runbook.md).
 
-1. Frame the project and record provenance.
-2. Audit and clean the supplied dataset.
-3. Build and reconcile the SQLite analytical layer.
-4. Perform Python EDA using governed KPI definitions.
-5. Build and validate Power BI and Tableau reports.
-6. Reconcile all tools and prepare the executive narrative.
-7. Package the portfolio and interview walkthrough.
+## Responsible interpretation
 
-Each phase stops at a learning and validation gate before the next phase begins.
+- Segment differences are associations, not causal effects.
+- The data has no observation date or future churn window.
+- Random holdout performance may overstate future operational performance.
+- Risk ranking must not become automated customer treatment.
+- A real program needs controlled experiments, customer-value economics, fairness governance, security, temporal validation, drift monitoring, and calibration monitoring.
+
+## Current status
+
+All repository-controlled analytical, modeling, documentation, preview, and packaging work is complete. Remaining external application gates are listed in the [release checklist](docs/portfolio_release_checklist.md).

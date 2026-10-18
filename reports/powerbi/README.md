@@ -1,6 +1,9 @@
 # Power BI deliverables
 
 - `theme.json`: governed report palette
+- `ml_measures.dax`: held-out evaluation measures for the predictive page
+- `ml_dashboard_specification.md`: predictive-page data and layout contract
+- `predictive_demonstration_preview.png`: target ML-page layout
 - `measures.dax`: authoritative measure definitions
 - `power_query.m`: typed connection to the processed customer table
 - `model.tmdl`: one-step semantic-model script for Power BI Desktop's TMDL view

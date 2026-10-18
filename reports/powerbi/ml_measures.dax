@@ -1,0 +1,13 @@
+// Measures for the disconnected Phase 7 evaluation tables.
+ML ROC AUC = CALCULATE ( MAX ( 'ML Model Metrics'[roc_auc] ), 'ML Model Metrics'[model] = "logistic_regression" )
+ML Average Precision = CALCULATE ( MAX ( 'ML Model Metrics'[average_precision] ), 'ML Model Metrics'[model] = "logistic_regression" )
+ML Top 20 Percent Customers = CALCULATE ( MAX ( 'ML Model Metrics'[top_20_percent_customers] ), 'ML Model Metrics'[model] = "logistic_regression" )
+ML Churners Captured Top 20 = CALCULATE ( MAX ( 'ML Model Metrics'[churners_captured_top_20_percent] ), 'ML Model Metrics'[model] = "logistic_regression" )
+ML Recall at Top 20 = CALCULATE ( MAX ( 'ML Model Metrics'[recall_at_top_20_percent] ), 'ML Model Metrics'[model] = "logistic_regression" )
+ML Lift at Top 20 = CALCULATE ( MAX ( 'ML Model Metrics'[lift_at_top_20_percent] ), 'ML Model Metrics'[model] = "logistic_regression" )
+ML Prediction Count = COUNTROWS ( 'ML Test Predictions' )
+ML True Positives = CALCULATE ( [ML Prediction Count], 'ML Test Predictions'[actual_churn] = 1, 'ML Test Predictions'[predicted_at_0_5] = 1 )
+ML False Positives = CALCULATE ( [ML Prediction Count], 'ML Test Predictions'[actual_churn] = 0, 'ML Test Predictions'[predicted_at_0_5] = 1 )
+ML False Negatives = CALCULATE ( [ML Prediction Count], 'ML Test Predictions'[actual_churn] = 1, 'ML Test Predictions'[predicted_at_0_5] = 0 )
+ML True Negatives = CALCULATE ( [ML Prediction Count], 'ML Test Predictions'[actual_churn] = 0, 'ML Test Predictions'[predicted_at_0_5] = 0 )
+

@@ -1,0 +1,13 @@
+{
+  "name": "Telecom Churn Intelligence",
+  "dataColors": ["#138A8A", "#E28A2B", "#7DB7D8", "#17324D", "#637381", "#B9CDD9"],
+  "background": "#FFFFFF",
+  "foreground": "#17324D",
+  "tableAccent": "#138A8A",
+  "good": "#138A8A",
+  "neutral": "#7DB7D8",
+  "bad": "#E28A2B",
+  "maximum": "#E28A2B",
+  "center": "#7DB7D8",
+  "minimum": "#138A8A"
+}

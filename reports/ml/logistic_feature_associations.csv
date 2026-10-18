@@ -1,0 +1,40 @@
+feature,coefficient,odds_ratio,absolute_coefficient,direction
+categorical__contract_Two year,-0.8153072522563745,0.4425033463205698,0.8153072522563745,lower modeled risk
+numeric__tenure,-0.8005769783765998,0.44906978579827894,0.8005769783765998,lower modeled risk
+categorical__internet_service_DSL,-0.7162998480447523,0.48855664947800415,0.7162998480447523,lower modeled risk
+categorical__internet_service_Fiber optic,0.610213488916997,1.8408243524319028,0.610213488916997,higher modeled risk
+categorical__contract_Month-to-month,0.5280383553060386,1.6956028737217517,0.5280383553060386,higher modeled risk
+numeric__monthly_charges,-0.49748923030207304,0.6080554318887825,0.49748923030207304,lower modeled risk
+categorical__paperless_billing_Yes,0.3647556057360646,1.4401619978049134,0.3647556057360646,higher modeled risk
+categorical__tech_support_No internet service,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__online_backup_No internet service,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__streaming_tv_No internet service,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__streaming_movies_No internet service,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__internet_service_No,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__device_protection_No internet service,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__online_security_No internet service,-0.3518388134466079,0.7033934904117597,0.3518388134466079,lower modeled risk
+categorical__multiple_lines_No phone service,-0.3019985331986959,0.7393391493523649,0.3019985331986959,lower modeled risk
+categorical__multiple_lines_No,-0.28157549811990423,0.7545939431006528,0.28157549811990423,lower modeled risk
+categorical__streaming_tv_No,-0.2763596022297116,0.7585401089960032,0.2763596022297116,lower modeled risk
+categorical__streaming_movies_No,-0.2760678999426309,0.7587614091559519,0.2760678999426309,lower modeled risk
+categorical__payment_method_Credit card (automatic),-0.2652868987218309,0.7669858711411043,0.2652868987218309,lower modeled risk
+categorical__dependents_Yes,-0.23386457262970636,0.7914689952026034,0.23386457262970636,lower modeled risk
+categorical__payment_method_Bank transfer (automatic),-0.2309979958317492,0.7937410568242741,0.2309979958317492,lower modeled risk
+categorical__online_security_Yes,-0.20860527980309979,0.8117155729482314,0.20860527980309979,lower modeled risk
+categorical__tech_support_Yes,-0.18228186487503345,0.8333664105888798,0.18228186487503345,lower modeled risk
+categorical__contract_One year,-0.17065627562404895,0.8431113215848915,0.17065627562404895,lower modeled risk
+categorical__streaming_tv_Yes,0.17027324310194852,1.185628771947218,0.17027324310194852,higher modeled risk
+categorical__streaming_movies_Yes,0.1699815408148787,1.18528297176063,0.1699815408148787,higher modeled risk
+categorical__phone_service_Yes,-0.15592663937567516,0.8556219570296434,0.15592663937567516,lower modeled risk
+categorical__payment_method_Electronic check,0.15570201358053679,1.1684779606429723,0.15570201358053679,higher modeled risk
+categorical__multiple_lines_Yes,0.12564885874424359,1.1338839449384863,0.12564885874424359,higher modeled risk
+categorical__payment_method_Mailed check,-0.11734229160133093,0.889280747730653,0.11734229160133093,lower modeled risk
+categorical__online_security_No,0.10251892067533351,1.1079582650301016,0.10251892067533351,higher modeled risk
+categorical__device_protection_No,-0.09289432879005453,0.9112897923033682,0.09289432879005453,lower modeled risk
+categorical__online_backup_Yes,-0.0776188782026005,0.9253170178341594,0.0776188782026005,lower modeled risk
+categorical__tech_support_No,0.0761955057472706,1.0791735381632874,0.0761955057472706,higher modeled risk
+numeric__senior_citizen,0.05350081812713619,1.0549578548568868,0.05350081812713619,higher modeled risk
+categorical__online_backup_No,-0.02846748092515971,0.9719339000234715,0.02846748092515971,lower modeled risk
+categorical__gender_Male,0.023087474937602798,1.023356053638978,0.023087474937602798,higher modeled risk
+categorical__partner_Yes,0.020803471724208638,1.0210213723487434,0.020803471724208638,higher modeled risk
+categorical__device_protection_Yes,-0.013192030337706474,0.9868946031190149,0.013192030337706474,lower modeled risk

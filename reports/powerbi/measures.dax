@@ -1,0 +1,44 @@
+// Governed measures for table 'telco_customer_churn_clean'.
+// Create these as measures, not calculated columns.
+
+Total Customers =
+DISTINCTCOUNT ( 'telco_customer_churn_clean'[customer_id] )
+
+Churned Customers =
+CALCULATE (
+    [Total Customers],
+    'telco_customer_churn_clean'[churn_flag] = 1
+)
+
+Retained Customers =
+CALCULATE (
+    [Total Customers],
+    'telco_customer_churn_clean'[churn_flag] = 0
+)
+
+Churn Rate =
+DIVIDE ( [Churned Customers], [Total Customers] )
+
+Total Monthly Charges =
+SUM ( 'telco_customer_churn_clean'[monthly_charges] )
+
+Average Monthly Charges =
+AVERAGE ( 'telco_customer_churn_clean'[monthly_charges] )
+
+Missing Total Charges =
+CALCULATE (
+    [Total Customers],
+    ISBLANK ( 'telco_customer_churn_clean'[total_charges] )
+)
+
+Validation Population Difference =
+[Total Customers] - 7043
+
+Validation Churned Difference =
+[Churned Customers] - 1869
+
+Validation Retained Difference =
+[Retained Customers] - 5174
+
+Validation Churn Rate Difference =
+[Churn Rate] - 0.26537

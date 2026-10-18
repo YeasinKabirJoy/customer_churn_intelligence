@@ -1,0 +1,45 @@
+TABLEAU CALCULATED FIELDS — TELECOM CUSTOMER CHURN INTELLIGENCE
+
+Create each field with the exact name shown. The source grain is one row per customer.
+
+Total Customers
+COUNTD([customer_id])
+
+Churned Customers
+COUNTD(IF [churn_flag] = 1 THEN [customer_id] END)
+
+Retained Customers
+COUNTD(IF [churn_flag] = 0 THEN [customer_id] END)
+
+Churn Rate
+IF [Total Customers] = 0 THEN 0
+ELSE [Churned Customers] / [Total Customers]
+END
+
+Total Monthly Charges
+SUM([monthly_charges])
+
+Average Monthly Charges
+AVG([monthly_charges])
+
+Missing Total Charges
+COUNTD(IF ISNULL([total_charges]) THEN [customer_id] END)
+
+Customer Status
+IF [churn_flag] = 1 THEN "Churned" ELSE "Retained" END
+
+Churn Rate Color
+IF [Churn Rate] >= 0.30 THEN "High"
+ELSEIF [Churn Rate] >= 0.15 THEN "Medium"
+ELSE "Low"
+END
+
+Reference Total Difference
+[Total Customers] - 7043
+
+Reference Churned Difference
+[Churned Customers] - 1869
+
+Reference Churn Rate Difference
+[Churn Rate] - 0.26537
+

@@ -1,0 +1,216 @@
+createOrReplace
+
+  model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    valueFilterBehavior: independent
+    dataAccessOptions
+      legacyRedirects
+      returnErrorValuesAsNull
+
+    table telco_customer_churn_clean
+
+      /// Distinct eligible customers in the active filter context.
+      measure 'Total Customers' = DISTINCTCOUNT ( 'telco_customer_churn_clean'[customer_id] )
+        formatString: #,0
+
+      /// Distinct churned customers in the active filter context.
+      measure 'Churned Customers' = CALCULATE ( [Total Customers], 'telco_customer_churn_clean'[churn_flag] = 1 )
+        formatString: #,0
+
+      /// Distinct retained customers in the active filter context.
+      measure 'Retained Customers' = CALCULATE ( [Total Customers], 'telco_customer_churn_clean'[churn_flag] = 0 )
+        formatString: #,0
+
+      /// Churned customers divided by total customers in the same filter context.
+      measure 'Churn Rate' = DIVIDE ( [Churned Customers], [Total Customers] )
+        formatString: 0.0%;-0.0%;0.0%
+
+      /// Sum of the current monthly charge field; not asserted to be recognized revenue.
+      measure 'Total Monthly Charges' = SUM ( 'telco_customer_churn_clean'[monthly_charges] )
+        formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+
+      measure 'Average Monthly Charges' = AVERAGE ( 'telco_customer_churn_clean'[monthly_charges] )
+        formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+
+      measure 'Missing Total Charges' = CALCULATE ( [Total Customers], ISBLANK ( 'telco_customer_churn_clean'[total_charges] ) )
+        formatString: #,0
+
+      measure 'Validation Population Difference' = [Total Customers] - 7043
+        formatString: #,0
+
+      measure 'Validation Churned Difference' = [Churned Customers] - 1869
+        formatString: #,0
+
+      measure 'Validation Retained Difference' = [Retained Customers] - 5174
+        formatString: #,0
+
+      measure 'Validation Churn Rate Difference' = [Churn Rate] - 0.26537
+        formatString: 0.000000%;-0.000000%;0.000000%
+
+      column customer_id
+        dataType: string
+        isKey
+        summarizeBy: none
+        sourceColumn: customer_id
+
+      column gender
+        dataType: string
+        summarizeBy: none
+        sourceColumn: gender
+
+      column senior_citizen
+        dataType: int64
+        isHidden
+        formatString: 0
+        summarizeBy: none
+        sourceColumn: senior_citizen
+
+      column partner
+        dataType: string
+        summarizeBy: none
+        sourceColumn: partner
+
+      column dependents
+        dataType: string
+        summarizeBy: none
+        sourceColumn: dependents
+
+      column tenure
+        dataType: int64
+        formatString: 0
+        summarizeBy: none
+        sourceColumn: tenure
+
+      column phone_service
+        dataType: string
+        summarizeBy: none
+        sourceColumn: phone_service
+
+      column multiple_lines
+        dataType: string
+        summarizeBy: none
+        sourceColumn: multiple_lines
+
+      column internet_service
+        dataType: string
+        summarizeBy: none
+        sourceColumn: internet_service
+
+      column online_security
+        dataType: string
+        summarizeBy: none
+        sourceColumn: online_security
+
+      column online_backup
+        dataType: string
+        summarizeBy: none
+        sourceColumn: online_backup
+
+      column device_protection
+        dataType: string
+        summarizeBy: none
+        sourceColumn: device_protection
+
+      column tech_support
+        dataType: string
+        summarizeBy: none
+        sourceColumn: tech_support
+
+      column streaming_tv
+        dataType: string
+        summarizeBy: none
+        sourceColumn: streaming_tv
+
+      column streaming_movies
+        dataType: string
+        summarizeBy: none
+        sourceColumn: streaming_movies
+
+      column contract
+        dataType: string
+        summarizeBy: none
+        sourceColumn: contract
+
+      column paperless_billing
+        dataType: string
+        summarizeBy: none
+        sourceColumn: paperless_billing
+
+      column payment_method
+        dataType: string
+        summarizeBy: none
+        sourceColumn: payment_method
+
+      column monthly_charges
+        dataType: double
+        formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+        summarizeBy: sum
+        sourceColumn: monthly_charges
+
+      column total_charges
+        dataType: double
+        formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+        summarizeBy: sum
+        sourceColumn: total_charges
+
+      column churn
+        dataType: string
+        summarizeBy: none
+        sourceColumn: churn
+
+      column senior_citizen_label
+        dataType: string
+        summarizeBy: none
+        sourceColumn: senior_citizen_label
+
+      column churn_flag
+        dataType: int64
+        isHidden
+        formatString: 0
+        summarizeBy: none
+        sourceColumn: churn_flag
+
+      column total_charges_missing
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: total_charges_missing
+
+      column tenure_band
+        dataType: string
+        summarizeBy: none
+        sourceColumn: tenure_band
+
+      partition telco_customer_churn_clean = m
+        mode: import
+        source =
+            let
+                Source = Csv.Document(
+                    File.Contents("D:\others\Github\customer_churn_intelligence\data\processed\telco_customer_churn_clean.csv"),
+                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]
+                ),
+                PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+                TypedColumns = Table.TransformColumnTypes(
+                    PromotedHeaders,
+                    {
+                        {"customer_id", type text}, {"gender", type text},
+                        {"senior_citizen", Int64.Type}, {"partner", type text},
+                        {"dependents", type text}, {"tenure", Int64.Type},
+                        {"phone_service", type text}, {"multiple_lines", type text},
+                        {"internet_service", type text}, {"online_security", type text},
+                        {"online_backup", type text}, {"device_protection", type text},
+                        {"tech_support", type text}, {"streaming_tv", type text},
+                        {"streaming_movies", type text}, {"contract", type text},
+                        {"paperless_billing", type text}, {"payment_method", type text},
+                        {"monthly_charges", Currency.Type}, {"total_charges", Currency.Type},
+                        {"churn", type text}, {"senior_citizen_label", type text},
+                        {"churn_flag", Int64.Type}, {"total_charges_missing", type logical},
+                        {"tenure_band", type text}
+                    }
+                )
+            in
+                TypedColumns
+
+      annotation PBI_NavigationStepName = Navigation
+      annotation PBI_ResultType = Table

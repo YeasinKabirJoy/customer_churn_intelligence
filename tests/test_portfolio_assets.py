@@ -15,8 +15,18 @@ def test_predictive_dashboard_contract_contains_required_metrics() -> None:
 
 
 def test_final_portfolio_documents_exist() -> None:
-    for name in ["executive_brief.md", "cross_tool_reconciliation.md", "reproducibility_runbook.md", "portfolio_release_checklist.md"]:
+    for name in ["executive_brief.md", "cross_tool_reconciliation.md", "reproducibility_runbook.md", "portfolio_release_checklist.md", "complete_interview_guide.md"]:
         assert (ROOT / "docs" / name).stat().st_size > 0
+
+
+def test_complete_interview_guide_has_full_question_set() -> None:
+    guide = (ROOT / "docs" / "complete_interview_guide.md").read_text(encoding="utf-8")
+    assert "### 1." in guide
+    assert "### 155." in guide
+    assert "## 15-day beginner-to-intermediate study plan" in guide
+    assert "STAR — Situation, Task, Action, Result" in guide
+    for expansion in ["Business Intelligence", "Structured Query Language", "Exploratory Data Analysis", "Data Analysis Expressions", "Receiver Operating Characteristic"]:
+        assert expansion in guide
 
 
 def test_predictive_dashboard_preview_renders() -> None:

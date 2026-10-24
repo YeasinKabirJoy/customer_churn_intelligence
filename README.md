@@ -4,11 +4,27 @@ An end-to-end analytics portfolio project that turns the IBM Telco Customer Chur
 
 > **Headline:** 1,869 of 7,043 customers churned (26.537%). Churn is concentrated among early-tenure, month-to-month, fiber-optic, and electronic-check customers. These overlapping observational patterns identify investigation priorities—not causal drivers.
 
-![Executive dashboard preview](reports/powerbi/executive_overview_preview.png)
-
 ## Business objective
 
 Help a retention team understand where churn is concentrated, select evidence-based investigation priorities, and design a controlled retention experiment. The project separates verified descriptive KPIs from predictive holdout metrics and avoids presenting association as causation.
+
+## Business intelligence dashboards
+
+The project provides interactive implementations in both **Power BI** and **Tableau** sharing the exact same governed metric definitions:
+
+### Power BI: Governed Executive Reporting
+- **Workbook:** `powerBI/dashboard.pbix`
+- **Pages:** Executive Overview, Segment Explorer, Builder Validation
+- **Architecture:** Reusable DAX measures (`DISTINCTCOUNT`, safe `DIVIDE`), synchronized multi-page slicers, and custom palette theme.
+
+![Power BI Executive Dashboard](reports/powerbi/executive_overview_preview.png)
+
+### Tableau: Focused Visual Exploration
+- **Workbook:** `tableau/dashboard.twb`
+- **Dashboard:** Churn Segment Explorer
+- **Architecture:** Dual-axis scatter plot (risk vs. scale), lifecycle tenure breakdown, and coordinated interactive filter actions.
+
+![Tableau Segment Explorer Dashboard](reports/tableau/tableau_explorer_preview.png)
 
 ## Verified results
 
@@ -77,19 +93,21 @@ flowchart LR
 - Fixed random seed and reproducible stratified train/test split.
 - Automated tests cover data, SQL, EDA, BI assets, ML, and portfolio outputs.
 
-See [cross-tool reconciliation](docs/cross_tool_reconciliation.md) for exact status. Interactive `.pbix` and `.twbx` files remain local application-level gates because native desktop control was unavailable; previews are not mislabeled as interactive workbooks.
+See [cross-tool reconciliation](docs/cross_tool_reconciliation.md) for exact status. Interactive `.pbix` and `.twb` dashboards are fully constructed, interaction-tested, and saved in `powerBI/dashboard.pbix` and `tableau/dashboard.twb` (with underlying specifications preserved in `reports/powerbi/` and `reports/tableau/`).
 
 ## Repository map
 
 ```text
 data/                  Local raw and generated data contracts
 docs/                  Dictionaries, QA, methodology, narrative, and runbooks
+powerBI/               Interactive Power BI report workbook (dashboard.pbix)
 reports/figures/       Verified EDA charts
 reports/ml/            Model artifacts, metrics, diagnostics, and exports
 reports/powerbi/       Theme, semantic definitions, DAX, specifications, previews
 reports/tableau/       Calculated fields, specifications, previews
 sql/                   SQLite schema, views, KPIs, segments, and checks
 src/                   Reproducible Python pipelines
+tableau/               Interactive Tableau workbook (dashboard.twb)
 tests/                 Automated validation suite
 ```
 
@@ -115,6 +133,10 @@ python -m pytest -q
 
 Detailed instructions are in the [reproducibility runbook](docs/reproducibility_runbook.md).
 
+<!-- ## Interview preparation
+
+The [complete interview guide](docs/complete_interview_guide.md) contains 155 beginner-to-intermediate technical, project, general, and behavioral questions with explanatory answers, acronym definitions, speaking scripts, practical SQL/Python exercises, and a focused 15-day study plan. -->
+
 ## Responsible interpretation
 
 - Segment differences are associations, not causal effects.
@@ -125,4 +147,4 @@ Detailed instructions are in the [reproducibility runbook](docs/reproducibility_
 
 ## Current status
 
-All repository-controlled analytical, modeling, documentation, preview, and packaging work is complete. Remaining external application gates are listed in the [release checklist](docs/portfolio_release_checklist.md).
+All analytical, modeling, documentation, and interactive BI dashboard work is complete. Both the Power BI (`powerBI/dashboard.pbix`) and Tableau (`tableau/dashboard.twb`) interactive workbooks have been verified, cross-reconciled, and saved.

@@ -8,7 +8,7 @@
 - [x] Power BI and Tableau source packages and previews included.
 - [x] ML leakage controls, holdout metrics, capacity analysis, calibration, risk deciles, and fairness diagnostics included.
 - [x] Executive brief, reconciliation record, and reproducibility runbook included.
-- [ ] Native `.pbix` opened, interaction-tested, and saved locally.
-- [ ] Native `.twbx` opened, action-tested, and saved locally.
+- [x] Native `.pbix` opened, interaction-tested, and saved locally.
+- [x] Native `.twbx` opened, action-tested, and saved locally.
 - [ ] Dataset redistribution/license decision made by repository owner.
 
